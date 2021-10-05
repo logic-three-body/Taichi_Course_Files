@@ -1,6 +1,23 @@
-# 太极图形课S1-标题部分
+# 太极图形课S1-HTC Homework
 ## 背景简介
+
+### About This repo
+
+这里记录我在[太极图形课第一季](https://www.bilibili.com/video/BV1aL4y1a7pv?p=11)所学习taichi语言和计算机图形学的笔记（note）和相关代码（code），实例图片会在data文件夹
+
 ### HW1
+
+#### JuliaSet RGB
+
+Learn from:[【cflw】曼德勃罗集合和朱利亚集合](https://forum.taichi.graphics/t/topic/1742)
+
+
+
+#### NoBody Galaxy
+
+Learn from:[【zhiyingli】N-Body and 2 BlackHoles](https://forum.taichi.graphics/t/1-n-body-and-2-blackholes/1769)	[Galaxy案例详解](https://www.bilibili.com/video/BV1aL4y1a7pv?p=11)
+
+
 
 ## 成功效果展示
 ### HW1
@@ -21,10 +38,16 @@
 ├── README.md
 ├── code
 │   └── HW1
-│       └── NoBody.py
+│       ├── NoBody.py
+│       └── JuliaSet.py
 ├── data
-│   ├── HW1.gif
-│   └── HW1.mov
+│   ├── Galaxy.gif
+│   └── JuliaSet.gif
+├── note
+│   └── Lec1
+│       ├── HelloTaichi.py
+│       ├── TaichiData.py
+│       └── ComputeCore.py
 └── requirements.txt
 
 ```
