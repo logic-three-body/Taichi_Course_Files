@@ -41,7 +41,52 @@ def lerp(a: float, b: float, t: float):
 
 Learn from:[【zhiyingli】N-Body and 2 BlackHoles](https://forum.taichi.graphics/t/1-n-body-and-2-blackholes/1769)	[Galaxy案例详解](https://www.bilibili.com/video/BV1aL4y1a7pv?p=11)
 
+代码原版是3000颗小行星之间万有引力作用，在此基础上加入一颗常量行星（不受其他行星万有引力作用但对其他行星有作用力）
 
+常量行星的质量相比小行星大很多倍，这样会吸引周围的行星涌向自己，常量行星半径也很大（为了醒目，后续会有鼠标控制）
+
+```python
+m = 1#小行星质量
+M = 5000#常量行星质量
+planet_radius = 2#小行星半径
+Const_planet_radius = 30#常量行星半径
+```
+
+给常量行星一个初始位置，后面鼠标也会控制这个位置
+
+```python
+Const_Pos=ti.Vector.field(2,ti.f32,())
+Const_Pos[None]=[.5,.5]
+```
+
+在计算作用力的函数中，添加常量行星和其他行星作用力逻辑（和小行星逻辑一样，核心是万有引力公式），这里会给每个小行星做一个标记，当常量星和小行星到达一定距离会被标记，在开启吸入模式后（点击鼠标右键），这些小行星会被吸入，这里吸入的逻辑就是将他们的position置为负（就不在屏幕空间[0,1]X[0,1]内了），velocity置为0
+
+compute_force函数：
+
+```python
+# Const planet
+for i in range(N):
+    diff = pos[i] - Const_Pos[None]#距离
+    if diff.norm() < 1e-2:#吸入标记
+    	IsHale[0, i] = 1
+    else:
+    	IsHale[0, i] = 0
+
+	r = diff.norm(1e-2)  # clamp to 1e-1 if diff<0
+	f = -G * m * M * (1.0 / r) ** 3 * diff #万有引力公式
+	force[i] += f
+```
+
+update函数：
+
+```python
+if Start[None] and IsHale[0, i]:
+	pos[i] = [-10000, -10000]
+	vel[i] = [0, 0]
+else:
+	vel[i] += dt * force[i] / m
+	pos[i] += dt * vel[i]
+```
 
 ## 成功效果展示
 ### HW1
@@ -52,10 +97,10 @@ Learn from:[【zhiyingli】N-Body and 2 BlackHoles](https://forum.taichi.graphic
 
 #### NoBody Galaxy
 
+鼠标左键控制常量巨星的位置，点击右键常量巨星会开始吸收周围行星（其他按键：点击键盘‘r’重新开始，空格暂停）
+
 ![fractal demo](./data/Galaxy.gif)
 ## 整体结构（Optional）
-脉络清晰的结构能完整展示你的设计思想，以及实现方式，方便读者快读代入，建议可以在repo的目录中包含如下内容：
-这个部分希望大家可以大作业中加入，小作业中可以选择性加入（如果不加也是OK的）
 ```shell
 .
 ├── LICENSE

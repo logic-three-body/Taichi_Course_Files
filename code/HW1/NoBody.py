@@ -15,7 +15,7 @@ G = 1
 N = 3000
 # unit mass
 m = 1
-M = 5000#big planet
+M = 5000  # big planet
 # galaxy size
 galaxy_size = 0.5
 # planet radius (for rendering)
@@ -34,18 +34,18 @@ substepping = 10
 center = ti.Vector.field(2, ti.f32, ())
 
 # Hale
-Start = ti.field(dtype=int,shape=())
-#IsHale = ti.field(1, ti.f32, N)
-IsHale = ti.field(dtype=int,shape=(1,N))
-
+Start = ti.field(dtype=int, shape=())
+# IsHale = ti.field(1, ti.f32, N)
+IsHale = ti.field(dtype=int, shape=(1, N))
 
 # pos, vel and force of the planets
 # Nx2 vectors
 pos = ti.Vector.field(2, ti.f32, N)
 vel = ti.Vector.field(2, ti.f32, N)
 force = ti.Vector.field(2, ti.f32, N)
-Const_Pos=ti.Vector.field(2,ti.f32,())
-Const_Pos[None]=[.5,.5]
+Const_Pos = ti.Vector.field(2, ti.f32, ())
+Const_Pos[None] = [.5, .5]
+
 
 @ti.kernel
 def initialize():
@@ -79,12 +79,14 @@ def compute_force():
                 # assign to each particle
                 force[i] += f
 
-    #Const planet
+    # Const planet
     for i in range(N):
         diff = pos[i] - Const_Pos[None]
-        #print(diff.norm())
-        if diff.norm()<1e-2:
-            IsHale[0,i] = 1
+        # print(diff.norm())
+        if diff.norm() < 1e-2:
+            IsHale[0, i] = 1
+        else:
+            IsHale[0, i] = 0
 
         r = diff.norm(1e-2)  # clamp to 1e-1 if diff<0
         f = -G * m * M * (1.0 / r) ** 3 * diff
@@ -98,14 +100,13 @@ def update():
         # symplectic euler
         # vel[i] += dt * force[i] / m
         # pos[i] += dt * vel[i]
-        if Start[None] and IsHale[0,i]:
-            #print(IsHale[0,i])
-            pos[i]=[-10000,-10000]
-            vel[i]=[0,0]
+        if Start[None] and IsHale[0, i]:
+            # print(IsHale[0,i])
+            pos[i] = [-1, -1]
+            vel[i] = [0, 0]
         else:
             vel[i] += dt * force[i] / m
             pos[i] += dt * vel[i]
-
 
 
 res = 500
@@ -122,21 +123,20 @@ while gui.running:
         elif e.key == ti.GUI.SPACE:
             paused[None] = not paused[None]
         elif e.key == ti.GUI.LMB:
-            Const_Pos[None] = [e.pos[0],e.pos[1]]
+            Const_Pos[None] = [e.pos[0], e.pos[1]]
         elif e.key == ti.GUI.RMB:
-            Start[None] = 1#start hale the planets
+            Start[None] = 1  # start hale the planets
 
     if not paused[None]:
         for i in range(substepping):
             compute_force()
             update()
 
-    #print(Start[None])
+    # print(Start[None])
 
     gui.circles(pos.to_numpy(), color=0xffffff, radius=planet_radius)
     gui.circle(pos=Const_Pos[None], color=0xF9F3DF, radius=Const_planet_radius)
-    gui.circle(pos=Const_Pos[None], color=0xCDF2CA, radius=Const_planet_radius/2)
-    gui.circle(pos=Const_Pos[None], color=0xFFC898, radius=Const_planet_radius/4)
-
+    gui.circle(pos=Const_Pos[None], color=0xCDF2CA, radius=Const_planet_radius / 2)
+    gui.circle(pos=Const_Pos[None], color=0xFFC898, radius=Const_planet_radius / 4)
 
     gui.show()
