@@ -3,7 +3,7 @@
 
 ### About This repo
 
-这里记录我在[太极图形课第一季](https://www.bilibili.com/video/BV1aL4y1a7pv?p=11)所学习taichi语言和计算机图形学的笔记（note）和相关代码（code），实例图片会在data文件夹
+这里记录我在[太极图形课第一季](https://www.bilibili.com/video/BV1aL4y1a7pv?p=11)所学习taichi语言和计算机图形学的笔记（[note](https://github.com/logic-three-body/Taichi_Course_Files/tree/master/note/Lec1)）和相关代码（[code](https://github.com/logic-three-body/Taichi_Course_Files/tree/master/code)），实例图片会在[data](https://github.com/logic-three-body/Taichi_Course_Files/tree/master/data)文件夹
 
 ### HW1
 
@@ -24,7 +24,7 @@ Learn from:[【zhiyingli】N-Body and 2 BlackHoles](https://forum.taichi.graphic
 
 #### JuliaSet RGB
 
-![JuliaSet](.\data\JuliaSet.gif)
+![JuliaSet](./data/JuliaSet.gif)
 
 #### NoBody Galaxy
 
