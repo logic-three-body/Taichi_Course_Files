@@ -11,7 +11,31 @@
 
 Learn from:[【cflw】曼德勃罗集合和朱利亚集合](https://forum.taichi.graphics/t/topic/1742)
 
+原版的Julia Set颜色输入的是灰度值
 
+```python
+pixels[i, j] = 1 - iterations * 0.02
+```
+
+如果希望是彩色输出则需要**RGB**值，可以用**ti.Vector**三维向量储存值
+
+```python
+pixels[i, j] = ti.Vector([r,g,b])
+```
+
+其中R可以为原来的**1 - iterations * 0.02**，G可以为R的反色**（1-R）**，B可以为R和G的**线性插值**
+
+```python
+color = iterations * 0.02
+r=color
+g=1-color
+b=lerp(r,g,0.7)
+```
+
+```python
+def lerp(a: float, b: float, t: float):
+	return a + (b - a) * t
+```
 
 #### NoBody Galaxy
 
